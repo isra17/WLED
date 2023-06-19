@@ -525,7 +525,7 @@ void serializeInfo(JsonObject root)
   leds[F("maxpwr")] = (strip.currentMilliamps)? strip.ablMilliampsMax : 0;
   leds[F("maxseg")] = strip.getMaxSegments();
   //leds[F("seglock")] = false; //might be used in the future to prevent modifications to segment config
-  
+
   uint8_t totalLC = 0;
   JsonArray lcarr = leds.createNestedArray(F("seglc"));
   uint8_t nSegs = strip.getLastActiveSegmentId();
@@ -590,7 +590,7 @@ void serializeInfo(JsonObject root)
   fs_info[F("pmt")] = presetsModifiedTime;
 
   root[F("ndc")] = nodeListEnabled ? (int)Nodes.size() : -1;
-  
+
   #ifdef ARDUINO_ARCH_ESP32
   #ifdef WLED_DEBUG
     wifi_info[F("txPower")] = (int) WiFi.getTxPower();
@@ -730,7 +730,7 @@ void serializePalettes(JsonObject root, AsyncWebServerRequest* request)
     JsonArray curPalette = palettes.createNestedArray(String(i));
     switch (i) {
       case 0: //default palette
-        setPaletteColors(curPalette, PartyColors_p); 
+        setPaletteColors(curPalette, PartyColors_p);
         break;
       case 1: //random
           curPalette.add("r");
@@ -753,7 +753,7 @@ void serializePalettes(JsonObject root, AsyncWebServerRequest* request)
         curPalette.add("c1");
         break;
       case 5: {//primary + secondary (+tert if not off), more distinct
-      
+
         curPalette.add("c1");
         curPalette.add("c1");
         curPalette.add("c1");
@@ -855,6 +855,7 @@ void serveJson(AsyncWebServerRequest* request)
   }
 
   #ifdef WLED_USE_DYNAMIC_JSON
+  #error "test"
   AsyncJsonResponse* response = new AsyncJsonResponse(JSON_BUFFER_SIZE);
   #else
   if (!requestJSONBufferLock(17)) return;
