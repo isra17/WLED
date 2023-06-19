@@ -134,6 +134,10 @@
 #endif
 
 
+#ifdef USERMOD_SEGMENTS_MAPPING
+#include "../usermods/segments_mapping/usermod_segments_mapping.h"
+#endif
+
 void registerUsermods()
 {
 /*
@@ -237,7 +241,7 @@ void registerUsermods()
   #ifdef USERMOD_WIZLIGHTS
   usermods.add(new WizLightsUsermod());
   #endif
-  
+
   #ifdef USERMOD_WORDCLOCK
   usermods.add(new WordClockUsermod());
   #endif
@@ -245,7 +249,7 @@ void registerUsermods()
   #ifdef USERMOD_MY9291
   usermods.add(new MY9291Usermod());
   #endif
-  
+
   #ifdef USERMOD_SI7021_MQTT_HA
   usermods.add(new Si7021_MQTT_HA());
   #endif
@@ -253,5 +257,9 @@ void registerUsermods()
   //WLEDMM ARTI-FX
   #ifdef USERMOD_ARTIFX
   usermods.add(new ARTIFXUserMod());
+  #endif
+
+  #ifdef USERMOD_SEGMENTS_MAPPING
+  usermods.add(new UsermodSegmentsMapping());
   #endif
 }

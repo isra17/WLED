@@ -79,6 +79,7 @@
 #define USERMOD_ID_BME280                30     //Usermod "usermod_bme280.h
 //WLEDMM
 #define USERMOD_ID_ARTIFX                31     //Usermod "usermod_v2_artifx.h"
+#define USERMOD_ID_SEGMENTS_MAPPING       32     //Usermod "usermod_segments_mapping.h
 
 //Access point behavior
 #define AP_BEHAVIOR_BOOT_NO_CONN          0     //Open AP when no connection after boot
@@ -329,10 +330,12 @@
 #define TOUCH_THRESHOLD 32 // limit to recognize a touch, higher value means more sensitive
 
 // Size of buffer for API JSON object (increase for more segments)
+#ifndef JSON_BUFFER_SIZE
 #ifdef ESP8266
   #define JSON_BUFFER_SIZE 10240
 #else
   #define JSON_BUFFER_SIZE 20480
+#endif
 #endif
 
 #ifdef WLED_USE_DYNAMIC_JSON

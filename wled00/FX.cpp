@@ -24,8 +24,9 @@
   Modified heavily for WLED
 */
 
-#include "FX.h"
 #include "wled.h"
+#include "FX.h"
+#include "../usermods/segments_mapping/segments_mapping.h"
 
 #define IBN 5100
 #define PALETTE_SOLID_WRAP (paletteBlend == 1 || paletteBlend == 3)
@@ -1159,7 +1160,7 @@ uint16_t WS2812FX::mode_fireworks_core(bool useAudio) {
     } }
     if (sampleAgc <= 1.0) {      // silence -> no new pixels, just blur
       valid1 = valid2 = false;   // do not copy last pixels
-      addPixels = false;         
+      addPixels = false;
       blurAmount = 128;
     }
     my_intensity = 129 - (SEGMENT.speed >> 1); // dirty hack: use "speed" slider value intensity (no idea how to _disable_ the first slider, but show the second one)
@@ -1662,8 +1663,8 @@ uint16_t WS2812FX::mode_multi_comet_core(bool useAudio)
       } else {                    // WLEDSR delay comet "launch" during silence, and wait until next beat
         if (random(SEGLEN) < 5) armed++;                                                   // new comet loaded and ready
         if (armed > 2) armed = 2;                                                          // max two armed at once (avoid overlap)
-        if (    (armed > 0) && (shotOne == false) 
-             && (sampleAgc > 1.0) && ((samplePeak > 1) || (int(rawSampleAgc) > 112)) ) {  // delayed lauch - wait until peak, don't launch in silence 
+        if (    (armed > 0) && (shotOne == false)
+             && (sampleAgc > 1.0) && ((samplePeak > 1) || (int(rawSampleAgc) > 112)) ) {  // delayed lauch - wait until peak, don't launch in silence
           comets[i] = 0; // start a new comet!
           armed--;       // un-arm one
           shotOne = true;
@@ -2938,7 +2939,7 @@ uint16_t WS2812FX::mode_popcorn_core(bool useAudio) {
   for(uint8_t i = 0; i < numPopcorn; i++) {
     if (popcorn[i].pos >= 0.0f) { // if kernel is active, update its position
       popcorn[i].pos += popcorn[i].vel;
-      popcorn[i].vel += gravity;      
+      popcorn[i].vel += gravity;
     } else { // if kernel is inactive, randomly pop it
       bool doPopCorn = false;
       if (!useAudio) {
@@ -4643,7 +4644,7 @@ void WS2812FX::drawLine(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1, uint
   const uint16_t rows = SEGMENT.height;
   if (x0 >= cols || x1 >= cols || y0 >= rows || y1 >= rows) return;
   const int16_t dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
-  const int16_t dy = abs(y1-y0), sy = y0<y1 ? 1 : -1; 
+  const int16_t dy = abs(y1-y0), sy = y0<y1 ? 1 : -1;
   int16_t err = (dx>dy ? dx : -dy)/2, e2;
   for (;;) {
     setPixelColor(XY(x0,y0),c);
@@ -7028,3 +7029,16 @@ uint16_t WS2812FX::mode_3DSphereMove(void) {
 
   return FRAMETIME;
 } // mode_3DSphereMove
+
+}
+
+uint16_t WS2812FX::mode_custom_circle(void) {
+  uint8_t shift = (now * ((SEGMENT.speed >> 3) +1)) >> 8;
+
+  for(int i = 0; i < SEGLEN; i++) {
+    PolarCoord polar = SegmentsMapping.getPixelPolarCoord(_segment_index, i, SEGLEN);
+    uint16_t x = (polar.theta >> 8) + shift;
+    setPixelColor(i, color_wheel(x));
+  }
+  return FRAMETIME;
+}

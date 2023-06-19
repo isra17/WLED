@@ -1,5 +1,5 @@
-#include "pin_manager.h"
 #include "wled.h"
+#include "pin_manager.h"
 
 #ifdef WLED_DEBUG
 static void DebugPrintOwnerTag(PinOwner tag)
@@ -31,7 +31,7 @@ bool PinManagerClass::deallocatePin(byte gpio, PinOwner tag)
     #endif
     return false;
   }
-  
+
   byte by = gpio >> 3;
   byte bi = gpio - 8*by;
   bitWrite(pinAlloc[by], bi, false);
@@ -105,7 +105,7 @@ bool PinManagerClass::allocateMultiplePins(const managed_pin_type * mptArray, by
       continue;
     } else if (isPinAllocated(gpio)) {
       #ifdef WLED_DEBUG
-      DEBUG_PRINT(F("PIN ALLOC: FAIL: IO ")); 
+      DEBUG_PRINT(F("PIN ALLOC: FAIL: IO "));
       DEBUG_PRINT(gpio);
       DEBUG_PRINT(F(" already allocated by "));
       DebugPrintOwnerTag(ownerTag[gpio]);
@@ -133,7 +133,7 @@ bool PinManagerClass::allocateMultiplePins(const managed_pin_type * mptArray, by
     bitWrite(pinAlloc[by], bi, true);
     ownerTag[gpio] = tag;
     #ifdef WLED_DEBUG
-    DEBUG_PRINT(F("PIN ALLOC: Pin ")); 
+    DEBUG_PRINT(F("PIN ALLOC: Pin "));
     DEBUG_PRINT(gpio);
     DEBUG_PRINT(F(" allocated by "));
     DebugPrintOwnerTag(tag);
@@ -149,7 +149,7 @@ bool PinManagerClass::allocatePin(byte gpio, bool output, PinOwner tag)
   if (!isPinOk(gpio, output) || tag==PinOwner::HW_I2C) return false;
   if (isPinAllocated(gpio)) {
     #ifdef WLED_DEBUG
-    DEBUG_PRINT(F("PIN ALLOC: Pin ")); 
+    DEBUG_PRINT(F("PIN ALLOC: Pin "));
     DEBUG_PRINT(gpio);
     DEBUG_PRINT(F(" already allocated by "));
     DebugPrintOwnerTag(ownerTag[gpio]);
@@ -163,12 +163,12 @@ bool PinManagerClass::allocatePin(byte gpio, bool output, PinOwner tag)
   bitWrite(pinAlloc[by], bi, true);
   ownerTag[gpio] = tag;
   #ifdef WLED_DEBUG
-  DEBUG_PRINT(F("PIN ALLOC: Pin ")); 
+  DEBUG_PRINT(F("PIN ALLOC: Pin "));
   DEBUG_PRINT(gpio);
   DEBUG_PRINT(F(" allocated by "));
   DebugPrintOwnerTag(tag);
   DEBUG_PRINTLN(F(""));
-  #endif  
+  #endif
 
   return true;
 }
@@ -188,7 +188,7 @@ bool PinManagerClass::isPinOk(byte gpio, bool output)
 {
   if (gpio <  6) return  true;
   if (gpio < 12) return false; //SPI flash pins
-  
+
   #ifdef ESP8266
   if (gpio < 17) return true;
   #else //ESP32

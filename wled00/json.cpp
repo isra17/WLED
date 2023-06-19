@@ -677,7 +677,7 @@ void serializeInfo(JsonObject root)
   #endif
 
   root[F("freeheap")] = ESP.getFreeHeap();
-  
+
   // begin WLEDSR
   usermod_updateInfo();   // small hack -> request status from soundreactive. Result are on audioStatusInfo.
   if (strlen(audioStatusInfo[0]) >0 ) {
@@ -691,7 +691,7 @@ void serializeInfo(JsonObject root)
 #endif
     if (strlen(audioStatusInfo[6]) >0 ) root[F("audioWarning")] = audioStatusInfo[6];
   }
-  
+
   root[F("totalheap")] = ESP.getHeapSize(); //WLEDSR
   root[F("minfreeheap")] = ESP.getMinFreeHeap();
   #if defined(ARDUINO_ARCH_ESP32) && defined(WLED_USE_PSRAM) && defined(BOARD_HAS_PSRAM)
@@ -699,7 +699,7 @@ void serializeInfo(JsonObject root)
     root[F("psram")] = ESP.getFreePsram();
     root[F("tpram")] = ESP.getPsramSize(); //WLEDSR
     root[F("psusedram")] = ESP.getMinFreePsram();
-  }  
+  }
   #endif
   #ifdef ARDUINO_ARCH_ESP32
   static char msgbuf[32];
@@ -905,7 +905,7 @@ void serializePalettes(JsonObject root, AsyncWebServerRequest* request)
         // WLEDSR workaround for palettes index overflow at i=73 -> gGradientPalettes index=60 out of bounds.
         int palIndex = i-13;
         constexpr int palMax = sizeof(gGradientPalettes)/sizeof(gGradientPalettes[0]) -1;
-        if ((palIndex < 0) || (palIndex > palMax)) { 
+        if ((palIndex < 0) || (palIndex > palMax)) {
             DEBUG_PRINTF("WARNING gGradientPalettes[%d] is out of bounds! max=%d. (json.cpp)\n", palIndex, palMax);
             palIndex = palMax;  // use last valid array item
         } // WLEDSR end

@@ -241,6 +241,7 @@
 #define FX_MODE_BLENDS                 115
 #define FX_MODE_TV_SIMULATOR           116
 #define FX_MODE_DYNAMIC_SMOOTH         117
+#define FX_MODE_CUSTOM_CIRCLE          118
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    Start of Audio Reactive fork (WLEDSR)                                                                                                       //
@@ -714,6 +715,7 @@ class WS2812FX {
       _mode[FX_MODE_BLENDS]                  = &WS2812FX::mode_blends;
       _mode[FX_MODE_TV_SIMULATOR]            = &WS2812FX::mode_tv_simulator;
       _mode[FX_MODE_DYNAMIC_SMOOTH]          = &WS2812FX::mode_dynamic_smooth;
+      _mode[FX_MODE_CUSTOM_CIRCLE]           = &WS2812FX::mode_custom_circle;
 
 // Technical notes
 // ===============
@@ -800,7 +802,7 @@ class WS2812FX {
       _mode[FX_MODE_2DAKEMI]                 = &WS2812FX::mode_2DAkemi;
 #ifdef USERMOD_ARTIFX
       _mode[FX_MODE_ARTIFX]                  = &WS2812FX::mode_ARTIFX; //WLEDMM ARTI-FX
-#endif      
+#endif
       _mode[FX_MODE_3DRIPPLES]               = &WS2812FX::mode_3DRipples;
       _mode[FX_MODE_3DSphereMove]            = &WS2812FX::mode_3DSphereMove;
 
@@ -1064,7 +1066,9 @@ class WS2812FX {
       mode_candy_cane(void),
       mode_blends(void),
       mode_tv_simulator(void),
-      mode_dynamic_smooth(void);
+      mode_dynamic_smooth(void),
+      mode_custom_circle(void)
+      ;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //    Start of Audio Reactive fork (WLEDSR)                                                                                              //
@@ -1432,7 +1436,7 @@ const char JSON_mode_names[] PROGMEM = R"=====([
 "Blends@Shift speed,Blend speed;1,2,3,!",
 "TV Simulator",
 "Dynamic Smooth",
-"Reserved0",
+"Custom Circle"
 "Reserved1",
 "Reserved2",
 "Reserved3",
