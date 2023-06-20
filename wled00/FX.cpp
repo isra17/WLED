@@ -658,7 +658,7 @@ uint16_t WS2812FX::mode_multi_strobe(void) {
   uint16_t count = 2 * ((SEGMENT.intensity / 10) + 1);
   if(SEGENV.aux1 < count) {
     if((SEGENV.aux1 & 1) == 0) {
-      fill(SEGCOLOR(0));
+      fill(SEGCOLOR(1));
       SEGENV.aux0 = 15;
     } else {
       SEGENV.aux0 = 50;
@@ -7030,14 +7030,27 @@ uint16_t WS2812FX::mode_3DSphereMove(void) {
   return FRAMETIME;
 } // mode_3DSphereMove
 
-}
-
-uint16_t WS2812FX::mode_custom_circle(void) {
-  uint8_t shift = (now * ((SEGMENT.speed >> 3) +1)) >> 8;
+uint16_t WS2812FX::mode_custom_circle_spin(void) {
+  uint8_t shift = (now * ((SEGMENT.speed >> 3) + 1)) >> 8;
+  uint8_t intensity = map(SEGMENT.intensity, 0, UINT8_MAX, 1, 8);
 
   for(int i = 0; i < SEGLEN; i++) {
     PolarCoord polar = SegmentsMapping.getPixelPolarCoord(_segment_index, i, SEGLEN);
-    uint16_t x = (polar.theta >> 8) + shift;
+    uint16_t x = ((polar.theta * intensity) >> 8) + shift;
+    setPixelColor(i, color_wheel(x));
+  }
+  return FRAMETIME;
+}
+
+uint16_t WS2812FX::mode_custom_spiral_spin(void) {
+  uint8_t shift = (now * ((SEGMENT.speed >> 3) + 1)) >> 8;
+  uint8_t intensity = map(SEGMENT.intensity, 0, UINT8_MAX, 1, 8);
+  uint16_t radius = SegmentsMapping.getRadius();
+
+  for(int i = 0; i < SEGLEN; i++) {
+    PolarCoord polar = SegmentsMapping.getPixelPolarCoord(_segment_index, i, SEGLEN);
+    uint16_t radius_x = map(polar.radius, 0, radius, 0, UINT16_MAX);
+    uint16_t x = ((polar.theta * intensity + radius_x * intensity) >> 8) - shift;
     setPixelColor(i, color_wheel(x));
   }
   return FRAMETIME;

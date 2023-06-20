@@ -17,7 +17,10 @@ typedef struct segment_mapping_t {
 class SegmentsMappingManager {
 private:
   std::vector<SegmentMapping> _mappings;
+  uint16_t _radius;
+
 public:
+
   PolarCoord getPixelPolarCoord(uint8_t segment, uint16_t pixel, uint16_t segment_length) {
     if (segment >= _mappings.size()) {
       return {.radius = 0, .theta = 0};
@@ -54,6 +57,15 @@ public:
     }
 
     return coord;
+  }
+
+  void pushMapping(SegmentMapping mapping) {
+    _radius = max(max(mapping.polar_to.radius, mapping.polar_from.radius), _radius);
+    _mappings.push_back(mapping);
+  }
+
+  uint16_t getRadius() {
+    return _radius;
   }
 
   friend class UsermodSegmentsMapping;
