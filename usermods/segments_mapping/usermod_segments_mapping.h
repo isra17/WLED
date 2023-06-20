@@ -62,7 +62,7 @@ public:
     SegmentsMapping._mappings.reserve(segments_json.size());
 
     for (JsonVariant obj : segments_json) {
-      SegmentsMapping._mappings.push_back(_jsonToSegmentMapping(obj.as<JsonObject>()));
+      SegmentsMapping.pushMapping(_jsonToSegmentMapping(obj.as<JsonObject>()));
     }
     return true;
   }
